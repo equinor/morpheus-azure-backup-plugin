@@ -127,6 +127,24 @@ class AzureBackupExecutionProvider implements BackupExecutionProvider {
 			}
 		}
 
+		protectedVmsResponse = apiService.listProtectedVms(authConfig, [resourceGroup: resourceGroup, vault: vault, client: client])
+		if(protectedVmsResponse.success == true) {
+			for (protectedVm in protectedVmsResponse.results?.value) {
+				if (protectedVm.properties.friendlyName == server.externalId) {
+					protectedItemName = 'VM;' + protectedVm.name
+					containerName = 'IaasVMContainer;' + protectedVm.name
+					vmId = protectedVm.properties.virtualMachineId
+					backup.setConfigProperty("protectedItemName", protectedItemName)
+					backup.setConfigProperty("containerName", containerName)
+					backup.setConfigProperty("vmId", vmId)
+					break
+				}
+			}
+		} else {
+			log.error("listProtectedVms error: ${protectedVmsResponse}")
+			return ServiceResponse.error("Error listing protected items", [error: "Error listing protected items"])
+		}
+
 		if(!protectedItemName) {
 			log.error("Protectable vm not found for ${server.externalId}. Check if there is an existing backup with that name")
 			return ServiceResponse.error("Protectable vm not found for ${server.externalId}. Check if there is an existing backup with that name", [error: "Protectable vm not found for ${server.externalId}. Check if there is an existing backup with that name"])
