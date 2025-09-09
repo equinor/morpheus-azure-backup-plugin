@@ -64,10 +64,11 @@ class VaultDatasetProvider extends AbstractDatasetProvider<ReferenceData, String
                     )
             )
 
-            if(cloud?.backupProvider) {
-                backupProvider = morpheus.services.backupProvider.find(new DataQuery().withFilter("account", account).withFilter("id", cloud.backupProvider.id))
+            if(cloud?.backupProviders) {
+                def backupProviderIds = cloud.backupProviders.collect { it.id }
+                def backupProviders = morpheus.services.backupProvider.listById(backupProviderIds).toList()
+                backupProvider = backupProvider = backupProviders.find { it.type.code == 'azure-backup' }
             }
-
             if(cloud && resourceGroup && backupProvider) {
                 return morpheusContext.async.referenceData.list(new DataQuery().withFilters(
                         new DataFilter('category', "${backupProvider.type.code}.backup.vault.${backupProvider.id}"),
