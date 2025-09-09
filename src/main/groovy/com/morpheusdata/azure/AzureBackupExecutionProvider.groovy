@@ -127,7 +127,7 @@ class AzureBackupExecutionProvider implements BackupExecutionProvider {
 			}
 		}
 
-		protectedVmsResponse = apiService.listProtectedVms(authConfig, [resourceGroup: resourceGroup, vault: vault, client: client])
+		def protectedVmsResponse = apiService.listProtectedVms(authConfig, [resourceGroup: resourceGroup, vault: vault, client: client])
 		if(protectedVmsResponse.success == true) {
 			for (protectedVm in protectedVmsResponse.results?.value) {
 				if (protectedVm.properties.friendlyName == server.externalId) {
