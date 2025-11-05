@@ -178,7 +178,7 @@ class ApiService {
             def apiPath = opts.vault?.internalId + '/backupPolicies'
             def apiVersion = '2024-04-01'
             def headers = buildHeaders(null, token, opts)
-            HttpApiClient.RequestOptions requestOpts = new HttpApiClient.RequestOptions([headers:headers, queryParams: ['api-version': apiVersion, $filter: "backupManagementType eq 'AzureIaasVM'"]])
+            HttpApiClient.RequestOptions requestOpts = new HttpApiClient.RequestOptions([headers:headers, queryParams: ['api-version': apiVersion]])
 
             def results = callListApi(authConfig.apiUrl, apiPath, requestOpts, 'GET', client)
             if(results.success && results.data) {
@@ -280,7 +280,7 @@ class ApiService {
             def apiPath = "/subscriptions/${authConfig.subscriberId}/resourceGroups/${opts.resourceGroup}/providers/Microsoft.RecoveryServices/vaults/${opts.vault}/backupProtectableItems"
             def apiVersion = '2016-12-01'
             def headers = buildHeaders(null, token, opts)
-            HttpApiClient.RequestOptions requestOpts = new HttpApiClient.RequestOptions([headers:headers, queryParams: ['api-version': apiVersion, $filter: "backupManagementType eq 'AzureIaasVM'"]])
+            HttpApiClient.RequestOptions requestOpts = new HttpApiClient.RequestOptions([headers:headers, queryParams: ['api-version': apiVersion]])
 
             def results = callListApi(authConfig.apiUrl, apiPath, requestOpts, 'GET', client)
             if(results.success && results.data) {
@@ -523,8 +523,8 @@ class ApiService {
             def apiPath = "/subscriptions/${authConfig.subscriberId}/resourceGroups/${opts.resourceGroup}/providers/Microsoft.RecoveryServices/vaults/${opts.vault}/backupjobs"
             def apiVersion = '2019-05-13'
             def headers = buildHeaders(null, token, opts)
-            def filter = opts.filter ?: "backupManagementType eq 'AzureIaasVM'"
-            HttpApiClient.RequestOptions requestOpts = new HttpApiClient.RequestOptions([headers:headers, queryParams: ['api-version': apiVersion, $filter: filter]])
+            
+            HttpApiClient.RequestOptions requestOpts = new HttpApiClient.RequestOptions([headers:headers, queryParams: ['api-version': apiVersion]])
 
             def results = callListApi(authConfig.apiUrl, apiPath, requestOpts, 'GET', client)
             if(results.success && results.data) {
