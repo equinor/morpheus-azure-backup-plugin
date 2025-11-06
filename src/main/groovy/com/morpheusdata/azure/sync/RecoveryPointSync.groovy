@@ -97,7 +97,7 @@ class RecoveryPointSync {
         def searchEndDate = lastRecoveryDate.toLocalDateTime().plusHours(24).toDate() // add 24 hours to the last recovery point, hopefully job is done by then
         def dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a")
         // can't filter by multiple statuses or by containerName, so we need to filter later
-        def filter = "startTime eq '${dateFormat.format(searchStartDate)}' and endTime eq '${dateFormat.format(searchEndDate)}' and operation eq 'Backup' and backupManagementType eq 'AzureIaasVM'"
+        def filter = "startTime eq '${dateFormat.format(searchStartDate)}' and endTime eq '${dateFormat.format(searchEndDate)}' and operation eq 'Backup' and backupManagementType eq 'AzureWorkload'"
         def backupJobsResults = apiService.listBackupJobs(opts.authConfig, [resourceGroup: opts.resourceGroup, vault: opts.vault, filter: filter, client: opts.client])
         if(!backupJobsResults.success) {
             log.error "Error getting backup jobs: ${backupJobsResults.errorCode} - ${backupJobsResults.msg}"
